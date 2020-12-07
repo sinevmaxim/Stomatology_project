@@ -1,0 +1,25 @@
+{% extends 'home/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Вход
+{% endblock %}
+
+{% block content %}
+<h1>Войти в систему</h1>
+    <form method="post" action="">
+        {%csrf_token%}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4"></legend>
+            {{form|crispy}}
+        </fieldset>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Войти</button>
+        </div>
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Ещё нет аккаунта?<a href="{% url 'register'%}" class="ml-2">Зарегестрируйся</a>
+        </small>
+    </div>
+{% endblock %}
