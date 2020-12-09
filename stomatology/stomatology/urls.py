@@ -4,7 +4,7 @@ from users import views as user_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from users.views import CreateAppointment
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -21,6 +21,7 @@ urlpatterns = [
         name="logout",
     ),
     path("profile/", user_views.profile, name="profile"),
+    path("appointment/", CreateAppointment.as_view(), name="appointment"),
 ]
 
 if settings.DEBUG:

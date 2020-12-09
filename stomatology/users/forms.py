@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
-from .models import Profile
+from .models import *
 
 
 class UserRegisterForm(UserCreationForm):
@@ -48,7 +48,6 @@ class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
     first_name = forms.CharField()
     last_name = forms.CharField()
-    
 
     class Meta:
         model = User
@@ -101,4 +100,15 @@ class ProfileUpdateForm(forms.ModelForm):
             "compulsory_health_insurance_policy_number",
             "phone_number",
         ]
-        
+
+
+class StomatologyAppointmentForm(forms.ModelForm):
+    # appointment_date = forms.DateTimeField(
+    #     label="Выберите дату посещения",
+    #     widget=forms.Select(choices=[(i, i) for i in range(0, 10)]),
+    # )
+    # doctor = forms.ModelChoiceField(queryset=Doctor.objects.all())
+
+    class Meta:
+        model = Appointment
+        exclude = ["user"]

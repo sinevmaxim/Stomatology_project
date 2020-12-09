@@ -8,26 +8,26 @@
 
 {% block content %}
     <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ user.first_name }}</h2>
-          <h2 class="account-heading">{{ user.last_name }}</h2>
-          <p class="text-secondary">{{ user.profile.phone_number }}</p>
-          <p class="text-secondary">{{ user.profile.compulsory_health_insurance_policy_number }}</p>
-          <p class="text-secondary">{{ user.email }}</p>
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading ml-4">{{ user.first_name }}</h2>
+                <h2 class="account-heading ml-4">{{ user.last_name }}</h2>
+                <div class="form-group" align="right">      
+                    <a href="{%url "appointment"%}" class="secondary-text" >Записаться на прием</a>
+                </div>
+            </div>
         </div>
-      </div>
-      <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
         {%csrf_token%}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Инфо профиля</legend>
-            {{u_form|crispy}}
-            {{p_form|crispy}}
-        </fieldset>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Изменить</button>
-        </div>
-    </form>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Инфо профиля</legend>
+                {{u_form|crispy}}
+                {{p_form|crispy}}
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Изменить</button>
+            </div>
+        </form>
     </div>
 {% endblock content %}
