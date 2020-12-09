@@ -4,7 +4,7 @@ from users import views as user_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from users.views import CreateAppointment
+from users.views import CreateAppointment, ListMyAppointments, ListDoctorAppointments
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -22,6 +22,17 @@ urlpatterns = [
     ),
     path("profile/", user_views.profile, name="profile"),
     path("appointment/", CreateAppointment.as_view(), name="appointment"),
+    path("my_appointments/", ListMyAppointments.as_view(), name="my_appointments"),
+    path(
+        "doctor_appointments/",
+        ListDoctorAppointments.as_view(),
+        name="doctor_appointments",
+    ),
+    path(
+        "doctor_appointments/<int:appointment_id>/",
+        user_views.doctor_update_appointment,
+        name="doctor_appointment_update",
+    ),
 ]
 
 if settings.DEBUG:

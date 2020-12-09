@@ -1,14 +1,12 @@
 {% extends 'home/base.html'%}
 {% load crispy_forms_tags %}
-{% extends 'home/base.html'%}
-{% load crispy_forms_tags %}
 {% block title %}
 Запись на прием
 {% endblock %}
 
 
 {% block content %}
-<h1>Записаться на прием</h1>
+<h1>Приём</h1>
     <form method="post" action="">
         {%csrf_token%}
         <fieldset class="form-group">
@@ -16,7 +14,7 @@
             {{form | crispy}}
         </fieldset>
         <div class="form-group">
-            <button type="submit" class="btn btn-success">Записаться</button>
+            <button type="submit" class="btn btn-success">Обработать приём</button>
         </div>
     </form>
 {% endblock %}

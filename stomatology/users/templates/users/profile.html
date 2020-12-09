@@ -14,7 +14,9 @@
                 <h2 class="account-heading ml-4">{{ user.first_name }}</h2>
                 <h2 class="account-heading ml-4">{{ user.last_name }}</h2>
                 <div class="form-group" align="right">      
-                    <a href="{%url "appointment"%}" class="secondary-text" >Записаться на прием</a>
+                    <a href="{%url "appointment"%}" class="secondary-text" >Записаться на прием</a><br>
+                    <a href="{%url "my_appointments"%}" class="secondary-text" >Мои записи</a>
+
                 </div>
             </div>
         </div>
