@@ -1,15 +1,15 @@
 {% extends 'home/base.html'%}
 {% load crispy_forms_tags %}
-{% extends 'home/base.html'%}
-{% load crispy_forms_tags %}
+
 {% block title %}
 Запись на прием
 {% endblock %}
 
 
 {% block content %}
+
 <h1>Записаться на прием</h1>
-    <form method="post" action="">
+    <form method="post" id="appointmentForm" data-time-url={%url "ajax_appointment"%}>
         {%csrf_token%}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4"></legend>
@@ -19,4 +19,32 @@
             <button type="submit" class="btn btn-success">Записаться</button>
         </div>
     </form>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_doctor").change(function () {
+        const url = $("#appointmentForm").attr("data-time-url");  // get the url of the `load_cities` view
+        const doctorId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'doctor_id': doctorId       // add the country id to the GET parameters
+            },
+            success: function (response) {   // `data` is the return of the `load_cities` view function
+                $("#id_appointment_date").html(response);  // replace the contents of the city input with the data that came from the server
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (city) {
+                    html_data += `<option value="${city.id}">${city.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_city").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
 {% endblock %}

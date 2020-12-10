@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -13,8 +13,8 @@ from .forms import (
     StomatologyAppointmentForm,
     StomatologyAppointmentFormDoctor,
 )
-from django.views.generic import CreateView, ListView
-from .models import Appointment, Doctor
+from django.views.generic import CreateView, ListView, View
+from .models import Appointment, Doctor, WorkingSchedule
 
 
 def register(request):
@@ -85,21 +85,6 @@ class ListDoctorAppointments(LoginRequiredMixin, ListView):
         )
 
 
-# class DoctorUpdateAppointment(LoginRequiredMixin, CreateView):
-#     form_class = StomatologyAppointmentFormDoctor
-#     template_name = "users/doctor_appointments.html"
-#     success_url = reverse_lazy("profile")
-#     redirect_field_name = "login"
-
-#     def form_valid(self, form):
-#         appointment_form = form.save(commit=False)
-#         appointment_form.doctor = self.request.user.doctor
-
-#         appointment_form.save()
-#         super().form_valid(form)
-#         return HttpResponseRedirect(self.get_success_url())
-
-
 def doctor_update_appointment(request, appointment_id):
     appointment_item = get_object_or_404(Appointment, id=appointment_id)
     if request.method == "POST":
@@ -111,3 +96,22 @@ def doctor_update_appointment(request, appointment_id):
     form = StomatologyAppointmentFormDoctor(instance=appointment_item)
     context = {"form": form}
     return render(request, "users/doctor_update_appointment.html", context)
+
+
+# def load_dates(request):
+#     doctor_id = request.GET.get("doctor_id")
+#     print(doctor_id)
+#     print(request)
+#     dates = WorkingSchedule.objects.filter(doctor=doctor_id, is_available=True).all()
+#     return render(request, "users/dates_dropdown_list_options.html", {"dates": dates})
+
+
+class AjaxHandlerView(View):
+    def get(self, request):
+        doctor_id = request.GET.get("doctor_id")
+        dates = WorkingSchedule.objects.filter(
+            doctor=doctor_id, is_available=True
+        ).all()
+        return render(
+            request, "users/dates_dropdown_list_options.html", {"dates": dates}
+        )

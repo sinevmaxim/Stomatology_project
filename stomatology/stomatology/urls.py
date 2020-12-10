@@ -4,7 +4,12 @@ from users import views as user_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from users.views import CreateAppointment, ListMyAppointments, ListDoctorAppointments
+from users.views import (
+    CreateAppointment,
+    ListMyAppointments,
+    ListDoctorAppointments,
+    AjaxHandlerView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -33,6 +38,7 @@ urlpatterns = [
         user_views.doctor_update_appointment,
         name="doctor_appointment_update",
     ),
+    path("ajax/appointment", AjaxHandlerView.as_view(), name="ajax_appointment"),
 ]
 
 if settings.DEBUG:
