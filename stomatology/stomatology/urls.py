@@ -10,6 +10,7 @@ from users.views import (
     ListDoctorAppointments,
     AjaxHandlerView,
 )
+from users.decorators import doctor_only
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,7 +31,7 @@ urlpatterns = [
     path("my_appointments/", ListMyAppointments.as_view(), name="my_appointments"),
     path(
         "doctor_appointments/",
-        ListDoctorAppointments.as_view(),
+        doctor_only(ListDoctorAppointments.as_view()),
         name="doctor_appointments",
     ),
     path(

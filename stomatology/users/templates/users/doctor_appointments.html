@@ -1,20 +1,24 @@
 {% extends 'home/base.html'%}
-{% load crispy_forms_tags %}
 {% block title %}
-Запись на прием
+Записи к вам
 {% endblock %}
 
-
 {% block content %}
-<h1>Приём</h1>
-    <form method="post" action="">
-        {%csrf_token%}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4"></legend>
-            {{form | crispy}}
-        </fieldset>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Обработать приём</button>
+{% for item in object_list %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="media">
+            <div class="media-body">
+                <h5 class="card-title">{{item}}</h5>
+                <p class="card-text">{{ item.comment|safe|linebreaks|truncatewords:50 }}</p>
+                <div class="form-group">
+                    <a href="{%url "doctor_appointment_update" item.id%}">Обработать</a> 
+                </div>
+            </div>
         </div>
-    </form>
+
+    </div>
+</div>
+{% endfor %}
+    
 {% endblock %}

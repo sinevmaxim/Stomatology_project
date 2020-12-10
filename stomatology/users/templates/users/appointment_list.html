@@ -11,9 +11,6 @@
             <div class="media-body">
                 <h5 class="card-title">{{item}}</h5>
                 <p class="card-text">{{ item.comment|safe|linebreaks|truncatewords:50 }}</p>
-                <div class="form-group">
-                    <a href="{%url "doctor_appointment_update" item.id%}">Обработать</a> 
-                </div>
             </div>
         </div>
 
