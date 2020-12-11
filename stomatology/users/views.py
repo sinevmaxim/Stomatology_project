@@ -14,7 +14,7 @@ from .forms import (
     StomatologyAppointmentFormDoctor,
 )
 from django.views.generic import CreateView, ListView, View
-from .models import Appointment, Doctor, WorkingSchedule
+from .models import Appointment, Doctor, WorkingSchedule, Profile
 from .decorators import (
     unauthenticated_user,
     doctor_only,
@@ -41,6 +41,14 @@ def register(request):
 
 @login_required
 def profile(request):
+    context = {
+        "user": request.user,
+    }
+    return render(request, "users/profile.html", context)
+
+
+@login_required
+def update_profile(request):
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(
@@ -55,7 +63,7 @@ def profile(request):
     p_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {"u_form": u_form, "p_form": p_form}
-    return render(request, "users/profile.html", context)
+    return render(request, "users/update_profile.html", context)
 
 
 class CreateAppointment(LoginRequiredMixin, CreateView):

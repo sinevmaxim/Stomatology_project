@@ -24,22 +24,11 @@
         {%csrf_token%}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Инфо профиля</legend>
-                    <p> Логин</p>
-                    <p class="form-control"> {{user.username}}</p>
-                    <p> Имя</p>
-                    <p class="form-control" label="Имя"> {{user.first_name}}</p>
-                    <p> Фамилия</p>
-                    <p class="form-control" label="Фамилия"> {{user.last_name}}</p>
-                    <p> Логин</p>
-                    <p class="form-control" label="Логин"> {{user.email}}</p>
-                    <p> Номер полиса ОМС</p>
-                    <p class="form-control" label="Номер полиса ОМС"> {{user.profile.compulsory_health_insurance_policy_number}}</p>
-                    <p> Номер телефона</p>
-                    <p class="form-control" label="Номер телефона"> {{user.profile.phone_number}}</p>
-
+                {{u_form|crispy}}
+                {{p_form|crispy}}
             </fieldset>
             <div class="form-group">
-                <a href="{%url "update_profile"%}">Изменить</a> 
+                <button type="submit" class="btn btn-success">Изменить</button>
             </div>
         </form>
     </div>
