@@ -12,6 +12,7 @@ class Appointment(models.Model):
     is_closed = models.BooleanField(default=False)
     is_visited = models.BooleanField(default=False)
     doctor_comment = models.TextField(blank=True, max_length=500)
+    creation_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Запись {self.user.last_name} {self.user.first_name} к {self.doctor} на {self.appointment_date}"
@@ -21,6 +22,9 @@ class Appointment(models.Model):
 
 
 class WorkingSchedule(models.Model):
-    time = models.DateTimeField()
+    appointment_time = models.DateTimeField()
     is_available = models.BooleanField(default=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.appointment_time}"

@@ -22,7 +22,7 @@ urlpatterns = [
         name="my_appointments",
     ),
     path(
-        "doctor_appointmnets",
+        "doctor_appointments",
         doctor_only(ListDoctorAppointments.as_view()),
         name="doctor_appointments",
     ),

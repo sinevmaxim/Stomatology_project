@@ -9,23 +9,25 @@ class StomatologyAppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        exclude = ["user", "is_closed", "is_visited", "doctor_comment"]
+        exclude = ["user", "is_closed", "is_visited", "doctor_comment", "creation_time"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        items = WorkingSchedule.objects.none()
-
-        self.fields["appointment_date"].queryset = items
+        self.fields["appointment_date"].queryset = WorkingSchedule.objects.none()
         if "doctor" in self.data:
             try:
                 doctor_id = int(self.data.get("doctor"))
+                print(
+                    WorkingSchedule.objects.filter(
+                        doctor=doctor_id, is_available=True
+                    ).order_by("appointment_time")
+                )
                 self.fields[
                     "appointment_date"
                 ].queryset = WorkingSchedule.objects.filter(
                     doctor=doctor_id, is_available=True
                 ).order_by(
-                    "time"
+                    "appointment_time"
                 )
             except (ValueError, TypeError):
                 pass
@@ -34,4 +36,4 @@ class StomatologyAppointmentForm(forms.ModelForm):
 class StomatologyAppointmentFormDoctor(forms.ModelForm):
     class Meta:
         model = Appointment
-        exclude = ["doctor", "user", "appointment_date", "comment"]
+        exclude = ["doctor", "user", "appointment_date", "comment", "creation_time"]

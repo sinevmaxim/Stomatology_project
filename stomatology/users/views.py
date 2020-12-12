@@ -35,6 +35,7 @@ def register(request):
 
 @login_required
 def profile(request):
+    print(request.user.id)
     context = {
         "user": request.user,
     }

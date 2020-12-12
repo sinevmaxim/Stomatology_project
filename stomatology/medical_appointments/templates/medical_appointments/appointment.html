@@ -22,26 +22,16 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $("#id_doctor").change(function () {
-        const url = $("#appointmentForm").attr("data-time-url");  // get the url of the `load_cities` view
-        const doctorId = $(this).val();  // get the selected country ID from the HTML input
+        const url = $("#appointmentForm").attr("data-time-url");
+        const doctorId = $(this).val();  
 
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+        $.ajax({                      
+            url: url,                  
             data: {
-                'doctor_id': doctorId       // add the country id to the GET parameters
+                'doctor_id': doctorId 
             },
-            success: function (response) {   // `data` is the return of the `load_cities` view function
-                $("#id_appointment_date").html(response);  // replace the contents of the city input with the data that came from the server
-                /*
-
-                let html_data = '<option value="">---------</option>';
-                data.forEach(function (city) {
-                    html_data += `<option value="${city.id}">${city.name}</option>`
-                });
-                console.log(html_data);
-                $("#id_city").html(html_data);
-
-                */
+            success: function (response) { 
+                $("#id_appointment_date").html(response);
             }
         });
 
