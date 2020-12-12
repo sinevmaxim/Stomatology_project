@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
-from .models import Profile, Doctor, Appointment, WorkingSchedule
+from .models import Profile
 
 
 class UserRegisterForm(UserCreationForm):
@@ -100,39 +100,3 @@ class ProfileUpdateForm(forms.ModelForm):
             "compulsory_health_insurance_policy_number",
             "phone_number",
         ]
-
-
-class StomatologyAppointmentForm(forms.ModelForm):
-    queryset = None
-    appointment_date = forms.ModelChoiceField(queryset=queryset)
-
-    class Meta:
-        model = Appointment
-        exclude = ["user", "is_closed", "is_visited", "doctor_comment"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        items = WorkingSchedule.objects.none()
-
-        self.fields["appointment_date"].queryset = items
-        if "doctor" in self.data:
-            try:
-                doctor_id = int(self.data.get("doctor"))
-                self.fields[
-                    "appointment_date"
-                ].queryset = WorkingSchedule.objects.filter(
-                    doctor=doctor_id, is_available=True
-                ).order_by(
-                    "time"
-                )
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields["appointment_date"].queryset = self.instance
-
-
-class StomatologyAppointmentFormDoctor(forms.ModelForm):
-    class Meta:
-        model = Appointment
-        exclude = ["doctor", "user", "appointment_date", "comment"]
