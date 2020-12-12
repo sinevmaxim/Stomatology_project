@@ -1,14 +1,46 @@
-{% extends 'home/base.html'%}
+{% extends "home/base.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
-    {{user.first_name}}{{user.last_name}}
+Профиль {{user.last_name}} {{user.first_name}}
 {% endblock %}
 
+
 {% block content %}
-    <h1>{{user.first_name}}
-        {{user.last_name}}
-        {{user.email}}
-    </h1>
-    
-{% endblock %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading ml-4">{{ user.first_name }}</h2>
+                <h2 class="account-heading ml-4">{{ user.last_name }}</h2>
+                <div class="form-group" align="right">      
+                    <a href="{%url "appointment"%}" class="secondary-text" >Записаться на прием</a><br>
+                    <a href="{%url "my_appointments"%}" class="secondary-text" >Мои записи</a>
+
+                </div>
+            </div>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Инфо профиля</legend>
+                    <p> Логин</p>
+                    <p class="form-control"> {{user.username}}</p>
+                    <p> Имя</p>
+                    <p class="form-control" label="Имя"> {{user.first_name}}</p>
+                    <p> Фамилия</p>
+                    <p class="form-control" label="Фамилия"> {{user.last_name}}</p>
+                    <p> Почтовый ящик</p>
+                    <p class="form-control" label="Почтовый ящик"> {{user.email}}</p>
+                    <p> Номер полиса ОМС</p>
+                    <p class="form-control" label="Номер полиса ОМС"> {{user.profile.compulsory_health_insurance_policy_number}}</p>
+                    <p> Номер телефона</p>
+                    <p class="form-control" label="Номер телефона"> {{user.profile.phone_number}}</p>
+
+            </fieldset>
+            <div class="form-group">
+                <a href="{%url "update_profile"%}">Изменить</a> 
+            </div>
+        </form>
+    </div>
+{% endblock content %}

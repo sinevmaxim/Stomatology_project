@@ -2,12 +2,64 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
+from .models import Profile
 
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
     first_name = forms.CharField()
     last_name = forms.CharField()
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password1",
+            "password2",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["first_name"].widget.attrs.update({"placeholder": ("Юзернейм")})
+        self.fields["first_name"].widget.attrs.update({"placeholder": ("Имя")})
+        self.fields["last_name"].widget.attrs.update({"placeholder": ("Фамилия")})
+        self.fields["email"].widget.attrs.update({"placeholder": ("Email")})
+        self.fields["password1"].widget.attrs.update({"placeholder": ("Пароль")})
+        self.fields["password2"].widget.attrs.update(
+            {"placeholder": ("Повторите пароль")}
+        )
+
+    def save(self, commit=True):
+        user = super(UserRegisterForm, self).save(commit=False)
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        user.email = self.cleaned_data["email"]
+
+        if commit:
+            user.save()
+
+        return user
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+
+class ProfileUpdateForm(forms.ModelForm):
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
         message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
@@ -42,40 +94,9 @@ class UserRegisterForm(UserCreationForm):
     )
 
     class Meta:
-        model = User
+        model = Profile
         fields = [
-            "username",
-            "first_name",
-            "last_name",
-            "email",
-            "password1",
-            "password2",
-            "phone_number",
+            "image",
             "compulsory_health_insurance_policy_number",
+            "phone_number",
         ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["first_name"].widget.attrs.update({"placeholder": ("Юзернейм")})
-        self.fields["first_name"].widget.attrs.update({"placeholder": ("Имя")})
-        self.fields["last_name"].widget.attrs.update({"placeholder": ("Фамилия")})
-        self.fields["email"].widget.attrs.update({"placeholder": ("Email")})
-        self.fields["password1"].widget.attrs.update({"placeholder": ("Пароль")})
-        self.fields["password2"].widget.attrs.update(
-            {"placeholder": ("Повторите пароль")}
-        )
-
-    def save(self, commit=True):
-        user = super(UserRegisterForm, self).save(commit=False)
-        user.first_name = self.cleaned_data["first_name"]
-        user.last_name = self.cleaned_data["last_name"]
-        user.email = self.cleaned_data["email"]
-        user.phone_number = self.cleaned_data["phone_number"]
-        user.compulsory_health_insurance_policy_number = self.cleaned_data[
-            "compulsory_health_insurance_policy_number"
-        ]
-
-        if commit:
-            user.save()
-
-        return user

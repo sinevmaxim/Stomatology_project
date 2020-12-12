@@ -1,0 +1,35 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Профиль {{user.last_name}} {{user.first_name}}
+{% endblock %}
+
+
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading ml-4">{{ user.first_name }}</h2>
+                <h2 class="account-heading ml-4">{{ user.last_name }}</h2>
+                <div class="form-group" align="right">      
+                    <a href="{%url "appointment"%}" class="secondary-text" >Записаться на прием</a><br>
+                    <a href="{%url "my_appointments"%}" class="secondary-text" >Мои записи</a>
+
+                </div>
+            </div>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Инфо профиля</legend>
+                {{u_form|crispy}}
+                {{p_form|crispy}}
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Изменить</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
