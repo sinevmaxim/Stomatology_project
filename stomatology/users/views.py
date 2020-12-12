@@ -25,6 +25,7 @@ from .decorators import (
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
+        
         if form.is_valid():
             form.save()
             last_name = form.cleaned_data.get("last_name")
@@ -33,9 +34,11 @@ def register(request):
                 request,
                 f"Зарегестрирован пользователь с именем {last_name} {first_name}. Войдите, чтобы начать работу",
             )
+            
             return redirect("login")
     else:
         form = UserRegisterForm()
+    
     return render(request, "users/register.html", {"form": form})
 
 
@@ -54,11 +57,14 @@ def update_profile(request):
         p_form = ProfileUpdateForm(
             request.POST, request.FILES, instance=request.user.profile
         )
+
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, f"Ваш аккаунт усмешно изменен")
+            
             return redirect("profile")
+
     u_form = UserUpdateForm(instance=request.user)
     p_form = ProfileUpdateForm(instance=request.user.profile)
 
@@ -77,6 +83,7 @@ class CreateAppointment(LoginRequiredMixin, CreateView):
         appointment_form.user = self.request.user
         appointment_form.save()
         super().form_valid(form)
+        
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -107,18 +114,22 @@ def doctor_update_appointment(request, appointment_id):
     ):
         messages.warning(request, "Вы не являетесь ведущим врачом для этой формы")
         return redirect("doctor_appointments")
+
     if appointment_item.is_closed == True:
         messages.warning(
             request,
             "Данная форма уже закрыта и вы не имеете права получить к ней доступ",
         )
         return redirect("doctor_appointments")
+
     if request.method == "POST":
         form = StomatologyAppointmentFormDoctor(request.POST, instance=appointment_item)
         if form.is_valid():
             form.save()
             messages.success(request, f"Вы завершили прием!")
+            
             return redirect("doctor_appointments")
+
     form = StomatologyAppointmentFormDoctor(instance=appointment_item)
     context = {"form": form}
     return render(request, "users/doctor_update_appointment.html", context)

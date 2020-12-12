@@ -10,7 +10,7 @@ from users.views import (
     ListDoctorAppointments,
     AjaxHandlerView,
 )
-from users.decorators import doctor_only, unauthenticated_user
+from users.decorators import doctor_only, unauthenticated_user, chip_number_needed
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -33,7 +33,11 @@ urlpatterns = [
     ),
     path("profile/", user_views.profile, name="profile"),
     path("update_profile/", user_views.update_profile, name="update_profile"),
-    path("appointment/", CreateAppointment.as_view(), name="appointment"),
+    path(
+        "appointment/",
+        chip_number_needed(CreateAppointment.as_view()),
+        name="appointment",
+    ),
     path("my_appointments/", ListMyAppointments.as_view(), name="my_appointments"),
     path(
         "doctor_appointments/",
